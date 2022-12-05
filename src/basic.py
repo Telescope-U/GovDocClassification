@@ -55,10 +55,13 @@ class TextDataset(Dataset):
         words = self.tag(words)
         word_idxs = self.vocab.forward(words)
         labels = self.data.iloc[index]['labels']
-        if len(labels) < 3:
+        if len(labels) == 1:
+            labels = labels + [0, 1]
+        elif len(labels) == 2:
             labels = labels + [0]
 
-        return torch.tensor(word_idxs), F.one_hot(torch.tensor(labels), num_classes=len(idx2label)).sum(axis=0).float()
+
+        return torch.tensor(word_idxs), F.one_hot(torch.tensor(labels), num_classes=18).sum(axis=0).float()
 
     def __len__(self):
         return self.data.shape[0]

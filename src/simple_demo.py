@@ -10,9 +10,10 @@ CLIP = 1
 input_dim = len(vocabulary)
 embedding_dim = 2048
 hidden_dim = 1024
-output_dim = 17
-model = SimpleNN(input_dim, embedding_dim, hidden_dim, output_dim)
-save_path = '../model_save/0.pt'
+output_dim = 18
+model = GCNN(input_dim)
+# model = SimpleNN(input_dim, embedding_dim, hidden_dim, output_dim)
+save_path = '../model_save/GCNN-1.pt'
 optimizer = optim.Adam(model.parameters())
 loss_fn = nn.BCELoss()
 
@@ -48,6 +49,7 @@ for epoch in range(EPOCHS):
     valid_losses.append(valid_loss)
 
     if valid_loss < best_valid_loss:
+        best_valid_loss = valid_loss
         torch.save({'val_loss':valid_losses,
                     'train_loss':train_losses,
                     'model':model,
