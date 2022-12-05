@@ -8,12 +8,12 @@ import random
 EPOCHS = 50
 CLIP = 1
 input_dim = len(vocabulary)
-embedding_dim = 2048
+embedding_dim = 256
 hidden_dim = 1024
 output_dim = 18
-model = GCNN(input_dim)
+model = GCNN(input_dim, embedding_dim=256)
 # model = SimpleNN(input_dim, embedding_dim, hidden_dim, output_dim)
-save_path = '../model_save/GCNN-1.pt'
+save_path = '../model_save/GCNN-2.pt'
 optimizer = optim.Adam(model.parameters())
 loss_fn = nn.BCELoss()
 
@@ -55,5 +55,5 @@ for epoch in range(EPOCHS):
                     'model':model,
                     }, save_path)
     print(f'Epoch: {epoch + 1:02}')
-    print(f'\tTrain Loss: {train_loss/k:.6f}')
-    print(f'\t Val. Loss: {valid_loss/k:.6f}')
+    print(f'\tTrain Loss: {train_loss/k:.10f}')
+    print(f'\t Val. Loss: {valid_loss/k:.10f}')

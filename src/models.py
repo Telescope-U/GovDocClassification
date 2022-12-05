@@ -61,6 +61,6 @@ class GCNN(nn.Module):
         #3. 池化并经过全连接层
         pool_output = torch.mean(H, dim = -1) #平均池化，得到[bs, 64]
         linear1_output = self.output_linear1(pool_output)  #对embedding维度64做映射
-        logits = self.output_linear2(linear1_output) #[bs,2]
+        logits = self.output_linear2(linear1_output) #[bs,18]
 
         return torch.sigmoid(logits)
