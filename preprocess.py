@@ -15,5 +15,16 @@ def get_dataframe(txt_file):
 train_df = get_dataframe('train.txt')
 val_df = get_dataframe('val.txt')
 
+# 将labels处理成数字组合
+labels_series = train_df['labels'].str.split(',')
+label_set = set()
+for labels in labels_series:
+    for label in labels:
+        label_set.add(label)
+label_set.add('')
+
+label_df = pd.DataFrame(label_set, columns=['label'])
+
 train_df.to_csv('./dataset/train.csv', index_label='id')
 val_df.to_csv('./dataset/val.csv', index_label='id')
+label_df.to_csv('./dataset/label.csv', index_label='id')

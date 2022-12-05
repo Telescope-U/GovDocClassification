@@ -10,17 +10,10 @@ from torchtext.data.utils import get_tokenizer
 
 train_df = pd.read_csv('../dataset/train.csv')
 val_df = pd.read_csv('../dataset/val.csv')
+label_df = pd.read_csv('../dataset/label.csv')
 
-# 将labels处理成数字组合
-labels_series = train_df['labels'].str.split(',')
-label_set = set()
-for labels in labels_series:
-    for label in labels:
-        label_set.add(label)
-label2idx = {label: i+1 for i, label in enumerate(label_set)}
-label2idx[''] = 0
-idx2label = {label2idx[label]: label for label in label2idx}
-
+label2idx = {line['label']:line['id'] for i, line in label_df.iterrows()}
+idx2label = {line['id']: line['label'] for i, line in label_df.iterrows()}
 # 将label处理成数字化
 def trans_label2idx(str_list):
     return [label2idx[label] for label in str_list]
@@ -74,5 +67,5 @@ class TextDataset(Dataset):
         words = words[:self.length] + ["<pad>"] * (self.length - min(len(words), self.length))
         return words
 
-train_dataset = TextDataset(train_df)
+# train_dataset = TextDataset(train_df)
 val_dataset = TextDataset(val_df)

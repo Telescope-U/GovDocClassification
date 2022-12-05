@@ -11,7 +11,6 @@ class SimpleNN(nn.Module):
 
     def forward(self, src):
         x = self.embedding(src)
-        #         x = x.view(-1, 500*512)
         x = F.relu(self.linear(x))
         prediction = torch.sigmoid(self.out(x))
         return prediction
