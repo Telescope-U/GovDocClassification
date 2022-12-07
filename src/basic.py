@@ -60,7 +60,6 @@ class TextDataset(Dataset):
         elif len(labels) == 2:
             labels = labels + [0]
 
-
         return torch.tensor(word_idxs), F.one_hot(torch.tensor(labels), num_classes=18).sum(axis=0).float()
 
     def __len__(self):

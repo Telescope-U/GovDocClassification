@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False)
-model_path = '../model_save/GCNN-2.pt'
+model_path = '../model_save/GCNN-3.pt' # embed = 512
 model = torch.load(model_path)['model']
 
 score = 0
@@ -24,6 +24,8 @@ with torch.no_grad():
         if np.setdiff1d(y_true, y_predict).size == 0 and y_true.size==y_predict.size:
             print(y_true, y_predict)
             score += 1
+        # else:
+        #     print(y_true, output.argsort()[-5:])
         # if np.intersect1d(y_true, y_predict).size > 0:
         #     print(y_true, y_predict)
         #     score += 1
@@ -34,5 +36,8 @@ val_loss = torch.load(model_path)['val_loss']
 train_loss = torch.load(model_path)['train_loss']
 plt.plot(range(len(val_loss)),val_loss, label='val loss')
 plt.plot(range(len(train_loss)),train_loss, label='train loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.title(model_path)
 plt.legend()
 plt.show()

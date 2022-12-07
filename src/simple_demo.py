@@ -8,12 +8,12 @@ import random
 EPOCHS = 50
 CLIP = 1
 input_dim = len(vocabulary)
-embedding_dim = 256
+embedding_dim = 512
 hidden_dim = 1024
 output_dim = 18
-model = GCNN(input_dim, embedding_dim=256)
+model = GCNN(input_dim, embedding_dim=embedding_dim)
 # model = SimpleNN(input_dim, embedding_dim, hidden_dim, output_dim)
-save_path = '../model_save/GCNN-2.pt'
+save_path = '../model_save/GCNN-3.pt'
 optimizer = optim.Adam(model.parameters())
 loss_fn = nn.BCELoss()
 
@@ -21,6 +21,8 @@ best_valid_loss = float('inf')
 train_losses = []
 valid_losses = []
 for epoch in range(EPOCHS):
+    # 进行K折验证。将id随机打乱并分成K份，轮流将1份作为验证集其他K-1分作为训练集。
+    # 训练loss 取K个loss的平均值
     random_ids = list(train_df['id']).copy()
     random.shuffle(random_ids)
     k = 10
@@ -50,10 +52,9 @@ for epoch in range(EPOCHS):
 
     if valid_loss < best_valid_loss:
         best_valid_loss = valid_loss
-        torch.save({'val_loss':valid_losses,
-                    'train_loss':train_losses,
-                    'model':model,
-                    }, save_path)
+        torch.save({'val_loss': valid_losses,
+                    'train_loss': train_losses,
+                    'model': model}, save_path)
     print(f'Epoch: {epoch + 1:02}')
     print(f'\tTrain Loss: {train_loss/k:.10f}')
     print(f'\t Val. Loss: {valid_loss/k:.10f}')
