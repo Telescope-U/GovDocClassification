@@ -1,4 +1,4 @@
-from basic import *
+from CreateDataset import *
 from Train_and_Evaualtion import *
 from models import *
 
@@ -15,7 +15,7 @@ model = GCNN(input_dim, embedding_dim=embedding_dim)
 # model = SimpleNN(input_dim, embedding_dim, hidden_dim, output_dim)
 save_path = '../model_save/GCNN-5.pt'
 optimizer = optim.Adam(model.parameters())
-loss_fn = nn.BCELoss()
+loss_fn = nn.BCELoss() # loss：二分类交叉熵
 
 best_valid_loss = float('inf')
 train_losses = []
@@ -32,6 +32,7 @@ for epoch in range(EPOCHS):
     valid_loss = 0
 
     for i in tqdm(range(k)):
+        # K折验证，按照划分好的id分离训练集和测试集
         test_ids = random_ids[i*fold_len:(i+1)*fold_len]
         train_ids = random_ids[:i*fold_len] + random_ids[(i+1)*fold_len:]
 

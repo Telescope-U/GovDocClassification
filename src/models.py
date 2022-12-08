@@ -3,6 +3,10 @@ import torch
 from torch.nn import functional as F
 
 class SimpleNN(nn.Module):
+    """
+    一个简单的神经网络模型，得到初始结果。
+    embeddingBag + 2*linear
+    """
     def __init__(self, input_dim, embedding_dim, hidden_dim, output_dim):
         super().__init__()
         self.embedding = nn.EmbeddingBag(input_dim, embedding_dim)
@@ -33,13 +37,12 @@ class GCNN(nn.Module):
         self.output_linear2 = nn.Linear(128, num_class)
 
     def forward(self, word_index):
-        #定义GCN网络的算子操作流程， 基于句子单词ID输入得到分类Logits输出
 
-        #1.通过word_index得到word_embedding
+        #1.得到word_embedding
         #word_index shape:[bs, max_seq_len]
         word_embedding = self.embedding_table(word_index) #[bs, max_seq_len, embedding_dim]
         # print("word_embedding:",word_embedding.shape)
-        #2。编写第一层1D门卷积模块
+        #2 第一层1D门卷积模块
         word_embedding = word_embedding.transpose(1, 2) #[bs, embedding_dim, max_seq_len]
         A = self.conv_A_1(word_embedding)  #(max_seq_len - kernel) // stride + 1，这里长度对吗？对的
         # A_shape [16, 64, 713]
@@ -60,7 +63,7 @@ class GCNN(nn.Module):
 
         #3. 池化并经过全连接层
         pool_output = torch.mean(H, dim = -1) #平均池化，得到[bs, 64]
-        linear1_output = self.output_linear1(pool_output)  #对embedding维度64做映射
+        linear1_output = self.output_linear1(pool_output)
         logits = self.output_linear2(linear1_output) #[bs,18]
 
         return torch.sigmoid(logits)

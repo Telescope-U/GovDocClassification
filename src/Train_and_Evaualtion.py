@@ -1,7 +1,5 @@
 from torch import nn
 import torch
-import torch.nn.functional as F
-from tqdm import tqdm
 
 def train(model, loader, optimizer, clip, loss_fn):
     model.train()
