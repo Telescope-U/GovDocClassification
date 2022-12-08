@@ -9,11 +9,11 @@ EPOCHS = 50
 CLIP = 1
 input_dim = len(vocabulary)
 embedding_dim = 512
-hidden_dim = 2048
+hidden_dim = 1024
 output_dim = 18
 model = GCNN(input_dim, embedding_dim=embedding_dim)
 # model = SimpleNN(input_dim, embedding_dim, hidden_dim, output_dim)
-save_path = '../model_save/GCNN-4.pt'
+save_path = '../model_save/GCNN-5.pt'
 optimizer = optim.Adam(model.parameters())
 loss_fn = nn.BCELoss()
 

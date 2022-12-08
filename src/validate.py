@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False)
-model_path = '../model_save/GCNN-4.pt' # embed = 512
+model_path = '../model_save/GCNN-3.pt' # embed = 512
 model = torch.load(model_path)['model']
 
 score = 0
